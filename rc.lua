@@ -389,6 +389,7 @@ globalkeys = my_table.join(
     awful.key({ altkey }, "F3", function () awful.util.spawn( "xfce4-appfinder" ) end, {description = "Xfce appfinder", group = "altkey"}),
 
 
+    awful.key({ }, "Print", function() awful.spawn.with_shell("flameshot gui") end, { description = "print screen", group = "hotkeys" }),
     -- XF86
     awful.key({ }, "XF86PowerOff", function () awful.util.spawn("arcolinux-logout") end, {description = "exit", group = "hotkeys"}),
     awful.key({ }, "XF86PowerDown", function () awful.util.spawn("arcolinux-logout") end, {description = "exit", group = "hotkeys"}),
