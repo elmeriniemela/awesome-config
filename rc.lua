@@ -124,7 +124,7 @@ local editorgui         = "code"
 local filemanager       = "thunar"
 local mailclient        = "thunderbird"
 local mediaplayer       = "spotify"
-local terminal          = "terminator"
+local terminal          = "xfce4-terminal"
 local virtualmachine    = "virtualbox"
 
 -- awesome variables
@@ -285,7 +285,7 @@ root.buttons(my_table.join(
 
 
 local function run_or_raise(cmd, class)
-    name = class:lower()
+    class = class:lower()
     local matcher = function (c)
         if not c.class then
             return false
@@ -346,7 +346,7 @@ globalkeys = my_table.join(
 
 
     -- super + ...
-    awful.key({ modkey }, "Return", function () run_or_raise(terminal, terminal) end, { description = "open existing or new terminal", group = "launcher" }),
+    awful.key({ modkey }, "Return", function () run_or_raise(terminal, "terminal") end, { description = "open existing or new terminal", group = "launcher" }),
     awful.key({ modkey }, "d", function () run_or_raise_name("libreoffice Documents/DEADLINES.ods", "DEADLINES.ods") end, { description = "open new terminal", group = "launcher" }),
     awful.key({ modkey }, "q", function () run_or_raise(browser1, browser1) end, { description = "open browser1", group = "launcher" }),
     awful.key({ modkey }, "e", function () run_or_raise(filemanager, filemanager) end, { description = "open filemanager", group = "launcher" } ),

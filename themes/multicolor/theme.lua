@@ -210,10 +210,12 @@ function theme.at_screen_connect(s)
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
+    local clock             = require('widget.clock')(s)
 
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
+        expand = 'none',
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             --s.mylayoutbox,
@@ -221,7 +223,7 @@ function theme.at_screen_connect(s)
             s.mypromptbox,
         },
         --s.mytasklist, -- Middle widget
-        nil,
+        clock,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             netdownicon,
@@ -238,8 +240,6 @@ function theme.at_screen_connect(s)
             temp.widget,
             baticon,
             bat.widget,
-            clockicon,
-            mytextclock,
             wibox.widget.systray(),
 
         },

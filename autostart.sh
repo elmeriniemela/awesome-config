@@ -14,3 +14,9 @@ run blueberry-tray
 run /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 run numlockx on
 run volumeicon
+run xautolock -time 60 -locker "betterlockscreen -l" -detectsleep
+
+#  disabling energy star features
+xset -dpms
+# disable screensaver
+xset s off
