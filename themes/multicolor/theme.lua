@@ -41,6 +41,7 @@ theme.menu_fg_normal                            = "#aaaaaa"
 theme.menu_fg_focus                             = "#e4e4e4"
 theme.menu_bg_normal                            = "#050505dd"
 theme.menu_bg_focus                             = "#050505dd"
+theme.awesome_icon                              = theme.confdir .. "/icons/awesome_icon_white.png"
 theme.widget_temp                               = theme.confdir .. "/icons/temp.png"
 theme.widget_uptime                             = theme.confdir .. "/icons/ac.png"
 theme.widget_cpu                                = theme.confdir .. "/icons/cpu.png"
@@ -176,6 +177,8 @@ local memory = lain.widget.mem({
     end
 })
 
+local mylauncher = awful.widget.button({ image = theme.awesome_icon })
+mylauncher:connect_signal("button::press", function() awful.util.spawn("arcolinux-logout") end)
 
 function theme.at_screen_connect(s)
     -- Quake application
@@ -253,6 +256,7 @@ function theme.at_screen_connect(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
+            mylauncher,
         },
         s.mytasklist, -- Middle widget
         { -- Right widgets
