@@ -3,8 +3,6 @@
      Awesome WM configuration template
      https://github.com/awesomeWM
 
-     Freedesktop : https://github.com/lcpz/awesome-freedesktop
-
      Copycats themes : https://github.com/lcpz/awesome-copycats
 
      lain : https://github.com/lcpz/lain
@@ -42,7 +40,6 @@ naughty.config.defaults['timeout'] = 20
 --local menubar       = require("menubar")
 
 local lain          = require("lain")
-local freedesktop   = require("freedesktop")
 
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
@@ -223,25 +220,6 @@ local myawesomemenu = {
     { "arandr", "arandr" },
 }
 
-awful.util.mymainmenu = freedesktop.menu.build({
-    before = {
-        { "Awesome", myawesomemenu },
-        --{ "Atom", "atom" },
-        -- other triads can be put here
-    },
-    after = {
-        { "Terminal", terminal },
-        { "Log out", function() awesome.quit() end },
-        { "Sleep", "systemctl suspend" },
-        { "Restart", "systemctl reboot" },
-        { "Shutdown", "systemctl poweroff" },
-        -- other triads can be put here
-    }
-})
-
--- hide menu when mouse leaves it
-awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function() awful.util.mymainmenu:hide() end)
-
 
 -- {{{ Screen
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
@@ -277,9 +255,7 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s)
 
 -- {{{ Mouse bindings
 root.buttons(my_table.join(
-    awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, awful.button.names.SCROLL_DOWN, awful.tag.viewprev)
+    awful.button({ }, 3, function () awful.util.spawn( "xfce4-appfinder" ) end)
 ))
 -- }}}
 
@@ -623,6 +599,7 @@ awful.rules.rules = {
           "pinentry",
           "veromix",
           "xtightvncviewer",
+          "Xfce4-appfinder",
           "Xfce4-terminal"},
 
         name = {
