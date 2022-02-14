@@ -23,12 +23,21 @@ local awful         = require("awful") --Everything related to window managment
 -- Widget and layout library
 local wibox         = require("wibox")
 
+awful.button.names = {
+    LEFT        = 1,-- The left mouse button.
+    MIDDLE      = 2,-- The scrollwheel button.
+    RIGHT       = 3,-- The context menu button.
+    SCROLL_UP   = 4,-- A scroll up increment.
+    SCROLL_DOWN = 5,-- A scroll down increment.
+}
+
 -- Theme handling library
 local beautiful     = require("beautiful")
 
 -- Notification library
 local naughty       = require("naughty")
 naughty.config.defaults['icon_size'] = 100
+naughty.config.defaults['timeout'] = 20
 
 --local menubar       = require("menubar")
 
@@ -70,15 +79,6 @@ end
 -- }}}
 
 
-
--- {{{ Autostart windowless processes
-local function run_once(cmd_arr)
-    for _, cmd in ipairs(cmd_arr) do
-        awful.spawn.with_shell(string.format("pgrep -u $USER -fx '%s' > /dev/null || (%s)", cmd, cmd))
-    end
-end
-
-run_once({ "unclutter -root" }) -- entries must be comma-separated
 -- }}}
 
 -- This function implements the XDG autostart specification
@@ -96,10 +96,10 @@ awful.spawn.with_shell(
 -- {{{ Variable definitions
 
 local themes = {
-    "multicolor",		-- 1
-    "powerarrow",      		-- 2
-    "powerarrow-blue",	 	-- 3 good
-    "blackburn",		-- 4
+    "multicolor",        -- 1
+    "powerarrow",              -- 2
+    "powerarrow-blue",         -- 3 good
+    "blackburn",        -- 4
     "copland",        -- 5
 }
 
@@ -279,7 +279,7 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s)
 root.buttons(my_table.join(
     awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, awful.button.names.SCROLL_DOWN, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -333,8 +333,8 @@ end
 -- {{{ Key bindings
 globalkeys = my_table.join(
 
-    awful.key({ modkey }, "space", dmenu_run, {description = "show run menu", group = "hotkeys"}),
-    -- awful.key({ modkey }, "space", function () awful.spawn("rofi -show drun") end, {description = "show run menu", group = "hotkeys"}),
+    -- awful.key({ modkey }, "space", dmenu_run, {description = "show run menu", group = "hotkeys"}),
+    awful.key({ modkey }, "space", function () awful.spawn("rofi -show drun") end, {description = "show run menu", group = "hotkeys"}),
 
     -- Function keys
     awful.key({ }, "F12", function () awful.util.spawn( "xfce4-terminal --drop-down" ) end, {description = "dropdown terminal" , group = "function keys"}),
@@ -374,8 +374,6 @@ globalkeys = my_table.join(
     -- ctrl+alt +  ...
     awful.key({ ctrlkey, altkey }, "w", function() awful.util.spawn( "arcolinux-welcome-app" ) end, {description = "ArcoLinux Welcome App", group = "alt+ctrl"}),
     awful.key({ ctrlkey, altkey }, "e", function() awful.util.spawn( "arcolinux-tweak-tool" ) end, {description = "ArcoLinux Tweak Tool", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "Next", function() awful.util.spawn( "conky-rotate -n" ) end, {description = "Next conky rotation", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "Prior", function() awful.util.spawn( "conky-rotate -p" ) end, {description = "Previous conky rotation", group = "alt+ctrl"}),
     awful.key({ ctrlkey, altkey }, "a", function() awful.util.spawn( "xfce4-appfinder" ) end, {description = "Xfce appfinder", group = "alt+ctrl"}),
     awful.key({ ctrlkey, altkey }, "o", function() awful.spawn.with_shell("$HOME/.config/awesome/scripts/picom-toggle.sh") end, {description = "Picom toggle", group = "alt+ctrl"}),
     awful.key({ ctrlkey, altkey }, "s", function() awful.util.spawn( mediaplayer ) end, {description = mediaplayer, group = "alt+ctrl"}),
@@ -387,6 +385,7 @@ globalkeys = my_table.join(
     -- alt + ...
     awful.key({ altkey }, "F2", function () awful.util.spawn( "xfce4-appfinder --collapsed" ) end, {description = "Xfce appfinder", group = "altkey"}),
     awful.key({ altkey }, "F3", function () awful.util.spawn( "xfce4-appfinder" ) end, {description = "Xfce appfinder", group = "altkey"}),
+    awful.key({ altkey }, "Tab", function () awful.spawn("rofi -show window -kb-accept-entry '!Alt-Tab,Return' -kb-row-down 'Alt-Tab,Down' -kb-cancel 'Alt+Escape,Escape'") end, { description = "Select Open client", group = "layout" } ),
 
 
     awful.key({ }, "Print", function() awful.spawn.with_shell("flameshot gui") end, { description = "print screen", group = "hotkeys" }),
@@ -462,38 +461,11 @@ for i = 1, 9 do
 end
 
 clientbuttons = gears.table.join(
-    awful.button(
-		{},
-		1,
-		function(c)
-			c:emit_signal('request::activate')
-			c:raise()
-		end
-	),
-	awful.button(
-		{modkey},
-		1,
-		awful.mouse.client.move
-	),
-	awful.button(
-		{modkey},
-		3,
-		awful.mouse.client.resize
-	),
-	awful.button(
-		{modkey},
-		4,
-		function()
-			awful.layout.inc(1)
-		end
-	),
-	awful.button(
-		{modkey},
-		5,
-		function()
-			awful.layout.inc(-1)
-		end
-	)
+    awful.button({}, 1, function(c) c:emit_signal('request::activate') c:raise() end),
+    awful.button({modkey}, 1, awful.mouse.client.move),
+    awful.button({modkey}, 3, awful.mouse.client.resize),
+    awful.button({modkey}, 4, function() awful.layout.inc(1) end),
+    awful.button({modkey}, 5, function() awful.layout.inc(-1) end)
 )
 
 -- Set keys
@@ -666,15 +638,15 @@ awful.rules.rules = {
 
           -- Floating clients but centered in screen
     { rule_any = {
-       	class = {
-       		"Polkit-gnome-authentication-agent-1",
-			"Arcolinux-calamares-tool.py"
-				},
-				},
-      	properties = { floating = true },
-	      	callback = function (c)
-    		  awful.placement.centered(c,nil)
-       		end }
+           class = {
+               "Polkit-gnome-authentication-agent-1",
+            "Arcolinux-calamares-tool.py"
+                },
+                },
+          properties = { floating = true },
+              callback = function (c)
+              awful.placement.centered(c,nil)
+               end }
 }
 -- }}}
 
