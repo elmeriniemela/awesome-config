@@ -14,9 +14,29 @@ local dpi   = require("beautiful.xresources").apply_dpi
 local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
+
+local function read_file(path)
+    local file = io.open(path, "rb") -- r read mode and b binary mode
+    if not file then return nil end
+    local content = file:read "*a" -- *a or *all reads the whole file
+    file:close()
+    return content
+end
+
+local function wallpaper(s)
+    wallpaper_path = read_file(os.getenv("HOME") .. "/.config/variety/wallpaper/wallpaper.jpg.txt")
+    if not wallpaper_path then
+        wallpaper_path = read_file(os.getenv("HOME") .. "/.config/variety/wallpaper/wallpaper.png.txt")
+    end
+    if not wallpaper_path then
+        wallpaper_path = os.getenv("HOME") .. "/.config/awesome/themes/multicolor/wallpaper.jpg"
+    end
+    return wallpaper_path
+end
+
 local theme                                     = {}
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
-theme.wallpaper                                 = theme.confdir .. "/wallpaper.jpg"
+theme.wallpaper                                 = wallpaper
 theme.font                                      = 'Inter Regular 10'
 theme.font_bold                                 = 'Inter Bold 10'
 theme.taglist_font                              = "Inter Regular 13"

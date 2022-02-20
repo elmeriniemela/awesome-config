@@ -702,3 +702,18 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart applications
 awful.spawn.with_shell("~/.config/awesome/autostart.sh")
 awful.spawn.with_shell("picom -b --config $HOME/.config/awesome/picom.conf")
+
+
+run_on_start_up = {
+    "picom -b --config $HOME/.config/awesome/picom.conf",
+    "nm-applet",
+    "pamac-tray",
+    "variety",
+    "xfce4-power-manager",
+    "blueberry-tray",
+    "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1",
+    "volumeicon",
+    "xautolock -detectsleep -time 60 -locker 'betterlockscreen -l'",
+    "xfce4-clipman",
+}
+
