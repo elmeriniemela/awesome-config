@@ -198,7 +198,7 @@ local memory = lain.widget.mem({
 })
 
 local mylauncher = awful.widget.button({ image = theme.awesome_icon })
-mylauncher:connect_signal("button::press", function() awful.util.spawn("arcolinux-logout") end)
+mylauncher:connect_signal("button::press", function() awful.util.spawn("archlinux-logout") end)
 
 function theme.at_screen_connect(s)
     -- Quake application

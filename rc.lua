@@ -356,7 +356,7 @@ globalkeys = my_table.join(
     awful.key({ ctrlkey, altkey }, "u", function() awful.util.spawn( "pavucontrol" ) end, {description = "pulseaudio control", group = "alt+ctrl"}),
     awful.key({ ctrlkey, altkey }, "m", function() awful.util.spawn( "xfce4-settings-manager" ) end, {description = "Xfce settings manager", group = "alt+ctrl"}),
     awful.key({ ctrlkey, altkey }, "p", function() awful.util.spawn( "pamac-manager" ) end, {description = "Pamac Manager", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "Delete", function () awful.util.spawn("arcolinux-logout") end, {description = "exit", group = "hotkeys"}),
+    awful.key({ ctrlkey, altkey }, "Delete", function () awful.util.spawn("archlinux-logout") end, {description = "exit", group = "hotkeys"}),
 
     -- alt + ...
     awful.key({ altkey }, "F2", function () awful.util.spawn( "xfce4-appfinder --collapsed" ) end, {description = "Xfce appfinder", group = "altkey"}),
@@ -366,8 +366,8 @@ globalkeys = my_table.join(
 
     awful.key({ }, "Print", function() awful.spawn.with_shell("flameshot gui") end, { description = "print screen", group = "hotkeys" }),
     -- XF86
-    awful.key({ }, "XF86PowerOff", function () awful.util.spawn("arcolinux-logout") end, {description = "exit", group = "hotkeys"}),
-    awful.key({ }, "XF86PowerDown", function () awful.util.spawn("arcolinux-logout") end, {description = "exit", group = "hotkeys"}),
+    awful.key({ }, "XF86PowerOff", function () awful.util.spawn("archlinux-logout") end, {description = "exit", group = "hotkeys"}),
+    awful.key({ }, "XF86PowerDown", function () awful.util.spawn("archlinux-logout") end, {description = "exit", group = "hotkeys"}),
     awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end, {description = "+10%", group = "hotkeys"}),
     awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end, {description = "-10%", group = "hotkeys"}),
     awful.key({ }, "XF86AudioRaiseVolume", function () os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel)) beautiful.volume.update() end),
@@ -589,7 +589,9 @@ awful.rules.rules = {
           "Font-manager",
           "Kruler",
           "MessageWin",  -- kalarm.
-          "arcolinux-logout",
+          "archlinux-logout",
+          "bitcoin-qt",
+          "Bitcoin-Qt",
           "Peek",
           "Skype",
           "System-config-printer.py",
