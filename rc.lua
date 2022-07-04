@@ -602,7 +602,10 @@ awful.rules.rules = {
           "veromix",
           "xtightvncviewer",
           "Xfce4-appfinder",
-          "Xfce4-terminal"},
+          "Xfce4-terminal",
+          "Polkit-gnome-authentication-agent-1",
+          "Arcolinux-calamares-tool.py",
+        },
 
         name = {
           "Event Tester",  -- xev.
@@ -613,19 +616,11 @@ awful.rules.rules = {
           "Preferences",
           "setup",
         }
-      }, properties = { floating = true }},
-
-          -- Floating clients but centered in screen
-    { rule_any = {
-           class = {
-               "Polkit-gnome-authentication-agent-1",
-            "Arcolinux-calamares-tool.py"
-                },
-                },
-          properties = { floating = true },
-              callback = function (c)
-              awful.placement.centered(c,nil)
-               end }
+      }, properties = {
+        floating = true,
+        above = true,
+        placement = awful.placement.centered
+    }},
 }
 -- }}}
 
