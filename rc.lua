@@ -471,58 +471,61 @@ awful.rules.rules = {
     },
 
     -- Floating clients.
-    { rule_any = {
-        instance = {
-          "DTA",  -- Firefox addon DownThemAll.
-          "copyq",  -- Includes session name in class.
-        },
-        class = {
-          "Arandr",
-          "Arcolinux-welcome-app.py",
-          "Blueberry",
-          "Galculator",
-          "Gnome-font-viewer",
-          "Gpick",
-          "Imagewriter",
-          "Font-manager",
-          "Kruler",
-          "MessageWin",  -- kalarm.
-          "archlinux-logout",
-          "bitcoin-qt",
-          "Bitcoin-Qt",
-          "Peek",
-          "Skype",
-          "System-config-printer.py",
-          "Sxiv",
-          "Unetbootin.elf",
-          "Wpa_gui",
-          "pinentry",
-          "veromix",
-          "xtightvncviewer",
-          "Xfce4-appfinder",
-          "Xfce4-terminal",
-          "Polkit-gnome-authentication-agent-1",
-          "Arcolinux-calamares-tool.py",
-        },
+    {
+        rule_any = {
+            instance = {
+                "DTA",  -- Firefox addon DownThemAll.
+                "copyq",  -- Includes session name in class.
+            },
+            class = {
+                "Arandr",
+                "Arcolinux-welcome-app.py",
+                "Blueberry",
+                "Galculator",
+                "Gnome-font-viewer",
+                "Gpick",
+                "Imagewriter",
+                "Font-manager",
+                "Kruler",
+                "MessageWin",  -- kalarm.
+                "archlinux-logout",
+                "bitcoin-qt",
+                "Bitcoin-Qt",
+                "Peek",
+                "Skype",
+                "System-config-printer.py",
+                "Sxiv",
+                "Unetbootin.elf",
+                "Wpa_gui",
+                "pinentry",
+                "veromix",
+                "xtightvncviewer",
+                "Xfce4-appfinder",
+                "Xfce4-terminal",
+                "Polkit-gnome-authentication-agent-1",
+                "Arcolinux-calamares-tool.py",
+                "electrum",
+            },
 
-        name = {
-          "Event Tester",  -- xev.
+            name = {
+                "Event Tester",  -- xev.
+            },
+            type = {
+                "dialog",
+            },
+            role = {
+                "AlarmWindow",  -- Thunderbird's calendar.
+                "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
+                "Preferences",
+                "setup",
+            },
         },
-        type = {
-            "dialog",
+        properties = {
+            floating = true,
+            above = true,
+            placement = awful.placement.centered,
         },
-        role = {
-          "AlarmWindow",  -- Thunderbird's calendar.
-          "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
-          "Preferences",
-          "setup",
-        }
-      },
-      properties = {
-        floating = true,
-        above = true,
-        placement = awful.placement.centered,
-    }},
+    },
 }
 -- }}}
 
