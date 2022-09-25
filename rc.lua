@@ -171,9 +171,7 @@ awful.util.taglist_buttons = my_table.join(
         if client.focus then
             client.focus:toggle_tag(t)
         end
-    end),
-    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+    end)
 )
 
 
@@ -198,9 +196,7 @@ end
 -- Tasklist is the bottom bar
 awful.util.tasklist_buttons = my_table.join(
     awful.button({ }, 1, click_focus_client),
-    awful.button({ }, 2, function (c) c:kill() end),
-    awful.button({ }, 4, function () awful.client.focus.byidx(1) end),
-    awful.button({ }, 5, function () awful.client.focus.byidx(-1) end)
+    awful.button({ }, 2, function (c) c:kill() end)
 )
 
 lain.layout.termfair.nmaster           = 3
@@ -439,9 +435,7 @@ end
 clientbuttons = gears.table.join(
     awful.button({}, 1, function(c) c:emit_signal('request::activate') c:raise() end),
     awful.button({modkey}, 1, awful.mouse.client.move),
-    awful.button({modkey}, 3, awful.mouse.client.resize),
-    awful.button({modkey}, 4, function() awful.layout.inc(1) end),
-    awful.button({modkey}, 5, function() awful.layout.inc(-1) end)
+    awful.button({modkey}, 3, awful.mouse.client.resize)
 )
 
 -- Set keys

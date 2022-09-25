@@ -197,13 +197,10 @@ local memory = lain.widget.mem({
     end
 })
 
-local mylauncher = awful.widget.button({ image = theme.awesome_icon })
-mylauncher:connect_signal("button::press", function() awful.util.spawn("archlinux-logout") end)
-
 function theme.at_screen_connect(s)
     -- Quake application
-   -- s.quake = lain.util.quake({ app = awful.util.terminal })
-   s.quake = lain.util.quake({ app = "urxvt", height = 0.50, argname = "--name %s" })
+    -- s.quake = lain.util.quake({ app = awful.util.terminal })
+    s.quake = lain.util.quake({ app = "urxvt", height = 0.50, argname = "--name %s" })
 
     -- If wallpaper is a function, call it with the screen
     local wallpaper = theme.wallpaper
@@ -219,16 +216,20 @@ function theme.at_screen_connect(s)
     end
     awful.tag(awful.util.tagnames, s, tag_layout)
 
+    s.mylauncher = awful.widget.button({ image = theme.awesome_icon })
+    s.mylauncher:buttons(my_table.join(
+        awful.button({ }, 1, function() awful.util.spawn("archlinux-logout") end)
+    ))
+
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
     s.mylayoutbox:buttons(my_table.join(
-                           awful.button({ }, 1, function () awful.layout.inc( 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(-1) end),
-                           awful.button({ }, 4, function () awful.layout.inc( 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+        awful.button({ }, 1, function () awful.layout.inc( 1) end),
+        awful.button({ }, 3, function () awful.layout.inc(-1) end)
+    ))
     -- Create a taglist widget
     s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
 
@@ -280,7 +281,7 @@ function theme.at_screen_connect(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            mylauncher,
+            s.mylauncher,
         },
         s.mytasklist, -- Middle widget
         { -- Right widgets
