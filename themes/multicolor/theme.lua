@@ -10,6 +10,8 @@ local lain  = require("lain")
 local awful = require("awful")
 local wibox = require("wibox")
 local dpi   = require("beautiful.xresources").apply_dpi
+local naughty = require("naughty")
+
 
 local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
@@ -68,6 +70,8 @@ theme.widget_cpu                                = theme.confdir .. "/icons/cpu.p
 theme.widget_weather                            = theme.confdir .. "/icons/dish.png"
 theme.widget_fs                                 = theme.confdir .. "/icons/fs.png"
 theme.widget_mem                                = theme.confdir .. "/icons/mem.png"
+theme.notifications_enabled                     = theme.confdir .. "/icons/notifications-enabled.png"
+theme.notifications_disabled                    = theme.confdir .. "/icons/notifications-disabled.png"
 theme.widget_netdown                            = theme.confdir .. "/icons/net_down.png"
 theme.widget_netup                              = theme.confdir .. "/icons/net_up.png"
 theme.widget_mail                               = theme.confdir .. "/icons/mail.png"
@@ -197,6 +201,21 @@ local memory = lain.widget.mem({
     end
 })
 
+local notifications = wibox.widget.imagebox(theme.notifications_enabled)
+notifications:buttons(my_table.join(
+    awful.button({ }, 1,
+        function()
+            naughty.toggle()
+            if naughty.is_suspended() then
+                notifications.image = theme.notifications_disabled
+            else
+                naughty.destroy_all_notifications()
+                notifications.image = theme.notifications_enabled
+            end
+        end
+    )
+))
+
 function theme.at_screen_connect(s)
     -- Quake application
     -- s.quake = lain.util.quake({ app = awful.util.terminal })
@@ -268,6 +287,7 @@ function theme.at_screen_connect(s)
             temp.widget,
             baticon,
             bat.widget,
+            notifications,
             wibox.widget.systray(),
 
         },
