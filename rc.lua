@@ -121,7 +121,7 @@ local editorgui         = "code"
 local filemanager       = "pcmanfm"
 local mailclient        = "thunderbird"
 local mediaplayer       = "spotify"
-local terminal          = "xfce4-terminal"
+local terminal          = "alacritty"
 local virtualmachine    = "virtualbox"
 
 -- awesome variables
@@ -308,9 +308,6 @@ globalkeys = my_table.join(
     -- awful.key({ modkey }, "space", dmenu_run, {description = "show run menu", group = "hotkeys"}),
     awful.key({ modkey }, "space", function () awful.spawn("rofi -show drun") end, {description = "show run menu", group = "hotkeys"}),
 
-    -- Function keys
-    awful.key({ }, "F12", function () awful.util.spawn( "xfce4-terminal --drop-down" ) end, {description = "dropdown terminal" , group = "function keys"}),
-
     -- super + ... function keys
     awful.key({ modkey }, "F1", hotkeys_popup.show_help, {description = "show help", group="awesome"}),
     awful.key({ modkey }, "F11", function () awful.util.spawn("rofi -theme-str -show drun") end, {description="rofi fullscreen", group="function keys"}),
@@ -496,6 +493,7 @@ awful.rules.rules = {
                 "xtightvncviewer",
                 "Xfce4-appfinder",
                 "Xfce4-terminal",
+                "Alacritty",
                 "Polkit-gnome-authentication-agent-1",
                 "Arcolinux-calamares-tool.py",
                 "electrum",
