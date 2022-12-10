@@ -110,6 +110,7 @@ beautiful.init(theme_path)
 local modkey       = "Mod4"
 local altkey       = "Mod1"
 local ctrlkey      = "Control"
+local shiftkey     = "Shift"
 
 -- personal variables
 --change these variables if you want
@@ -315,7 +316,8 @@ globalkeys = my_table.join(
 
 
     -- super + ...
-    awful.key({ modkey }, "Return", function () run_or_raise(terminal, "terminal") end, { description = "open existing or new terminal", group = "launcher" }),
+    awful.key({ modkey }, "Return", function () run_or_raise(terminal, terminal) end, { description = "open existing or new terminal", group = "launcher" }),
+    awful.key({ altkey }, "Return", function () awful.util.spawn(terminal) end, { description = "open new terminal", group = "launcher" } ),
     awful.key({ modkey }, "d", function () run_or_raise_name("libreoffice Documents/DEADLINES.ods", "DEADLINES.ods") end, { description = "open new terminal", group = "launcher" }),
     awful.key({ modkey }, "q", function () run_or_raise(browser1, browser1) end, { description = "open browser1", group = "launcher" }),
     awful.key({ modkey }, "e", function () run_or_raise(filemanager, filemanager) end, { description = "open filemanager", group = "launcher" } ),
@@ -337,7 +339,7 @@ globalkeys = my_table.join(
     awful.key({ ctrlkey, modkey }, "w", conf_monitor, {description="autoconfigure monitors", group = "hotkeys" }),
 
     -- ctrl + shift + ...
-    awful.key({ ctrlkey, "Shift" }, "Escape", function() awful.util.spawn("xfce4-taskmanager") end),
+    awful.key({ ctrlkey, shiftkey }, "Escape", function() awful.util.spawn("xfce4-taskmanager") end),
 
 
     -- ctrl+alt +  ...
@@ -404,7 +406,7 @@ for i = 1, 9 do
                   end,
                   descr_toggle),
         -- Move client to tag.
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, shiftkey }, "#" .. i + 9,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
@@ -416,7 +418,7 @@ for i = 1, 9 do
                   end,
                   descr_move),
         -- Toggle tag on focused client.
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Control", shiftkey }, "#" .. i + 9,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
