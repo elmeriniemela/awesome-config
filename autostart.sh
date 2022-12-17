@@ -21,3 +21,4 @@ run xfce4-clipman
 xset -dpms
 # disable screensaver
 xset s off
+picom -b --config $HOME/.config/awesome/picom.conf

@@ -318,7 +318,6 @@ globalkeys = my_table.join(
     -- super + ...
     awful.key({ modkey }, "Return", function () run_or_raise(terminal, terminal) end, { description = "open existing or new terminal", group = "launcher" }),
     awful.key({ altkey }, "Return", function () awful.util.spawn(terminal) end, { description = "open new terminal", group = "launcher" } ),
-    awful.key({ modkey }, "d", function () run_or_raise_name("libreoffice Documents/DEADLINES.ods", "DEADLINES.ods") end, { description = "open new terminal", group = "launcher" }),
     awful.key({ modkey }, "q", function () run_or_raise(browser1, browser1) end, { description = "open browser1", group = "launcher" }),
     awful.key({ modkey }, "e", function () run_or_raise(filemanager, filemanager) end, { description = "open filemanager", group = "launcher" } ),
     awful.key({ modkey }, "t", function () run_or_raise("thunderbird", "thunderbird") end, { description = "open thunderbird", group = "launcher" } ),
@@ -369,6 +368,12 @@ globalkeys = my_table.join(
     awful.key({ }, "XF86AudioLowerVolume", function () os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel)) beautiful.volume.update() end),
     awful.key({ }, "XF86AudioMute", function () os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel)) beautiful.volume.update() end)
 
+)
+
+clientkeys = gears.table.join(
+    awful.key({ modkey, }, "f", awful.client.floating.toggle, {description = "toggle floating", group = "client"}),
+    awful.key({ modkey, }, "m", function (c) c.minimized = true end, {description = "minimize", group = "client"}),
+    awful.key({ modkey, shiftkey }, "d", function (c) c:kill() end, {description = "close", group = "client"})
 )
 
 
@@ -496,6 +501,7 @@ awful.rules.rules = {
                 "Xfce4-appfinder",
                 "Xfce4-terminal",
                 "Alacritty",
+                "Termite",
                 "Polkit-gnome-authentication-agent-1",
                 "Arcolinux-calamares-tool.py",
                 "electrum",
@@ -597,19 +603,3 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 -- Autostart applications
 awful.spawn.with_shell("~/.config/awesome/autostart.sh")
-awful.spawn.with_shell("picom -b --config $HOME/.config/awesome/picom.conf")
-
-
-run_on_start_up = {
-    "picom -b --config $HOME/.config/awesome/picom.conf",
-    "nm-applet",
-    "pamac-tray",
-    "variety",
-    "xfce4-power-manager",
-    "blueberry-tray",
-    "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1",
-    "volumeicon",
-    "xautolock -detectsleep -time 60 -locker 'betterlockscreen -l'",
-    "xfce4-clipman",
-}
-
