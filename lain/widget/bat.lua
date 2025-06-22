@@ -57,7 +57,7 @@ local function factory(args)
         fg      = "#ffffff",
         bg      = "#CC0000",
         font    = "Monospace 22",
-        -- position = "top_middle",
+        position = "top_middle",
     }
 
     bat_notification_low_preset = {
@@ -67,7 +67,7 @@ local function factory(args)
         fg      = "#ffffff",
         bg      = "#CC0000",
         font    = "Monospace 22",
-        -- position = "top_middle",
+        position = "top_middle",
     }
 
     bat_notification_charged_preset = {
