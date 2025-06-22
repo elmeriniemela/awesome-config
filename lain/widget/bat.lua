@@ -28,7 +28,7 @@ local function factory(args)
 
     args              = args or {}
 
-    local bat         = { widget = args.widget or wibox.widget.textbox() }
+    local bat         = { widget = args.widget or wibox.widget.textbox(), notif_ids = {}}
     local timeout     = args.timeout or 15
     local notify      = args.notify or "on"
     local full_notify = args.full_notify or notify
@@ -209,25 +209,30 @@ local function factory(args)
 
         -- notifications for critical, low, and full levels
         if notify == "on" then
-            if bat_now.status == "Discharging" then
-                if tonumber(bat_now.perc) <= n_perc[1] then
-                    bat.id = naughty.notify({
-                        preset = bat_notification_critical_preset,
-                        replaces_id = bat.id
+            for s in screen do
+                if bat_now.status == "Discharging" then
+                    if tonumber(bat_now.perc) <= n_perc[1] then
+                        bat.notif_ids[s.index] = naughty.notify({
+                            preset = bat_notification_critical_preset,
+                            screen = s,
+                            replaces_id = bat.notif_ids[s.index]
+                        }).id
+                    elseif tonumber(bat_now.perc) <= n_perc[2] then
+                        bat.notif_ids[s.index] = naughty.notify({
+                            preset = bat_notification_low_preset,
+                            screen = s,
+                            replaces_id = bat.notif_ids[s.index]
+                        }).id
+                    end
+                    fullnotification = false
+                elseif bat_now.status == "Full" and full_notify == "on" and not fullnotification then
+                    bat.notif_ids[s.index] = naughty.notify({
+                        preset = bat_notification_charged_preset,
+                        screen = s,
+                        replaces_id = bat.notif_ids[s.index]
                     }).id
-                elseif tonumber(bat_now.perc) <= n_perc[2] then
-                    bat.id = naughty.notify({
-                        preset = bat_notification_low_preset,
-                        replaces_id = bat.id
-                    }).id
+                    fullnotification = true
                 end
-                fullnotification = false
-            elseif bat_now.status == "Full" and full_notify == "on" and not fullnotification then
-                bat.id = naughty.notify({
-                    preset = bat_notification_charged_preset,
-                    replaces_id = bat.id
-                }).id
-                fullnotification = true
             end
         end
     end
