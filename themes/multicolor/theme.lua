@@ -75,9 +75,9 @@ theme.notifications_disabled                    = theme.confdir .. "/icons/notif
 theme.widget_netdown                            = theme.confdir .. "/icons/net_down.png"
 theme.widget_netup                              = theme.confdir .. "/icons/net_up.png"
 theme.widget_mail                               = theme.confdir .. "/icons/mail.png"
-theme.widget_batt                               = theme.confdir .. "/icons/bat.png"
+theme.widget_batt                               = theme.confdir .. "/icons/battery-full-charged-symbolic.svg"
 theme.widget_clock                              = theme.confdir .. "/icons/clock.png"
-theme.widget_vol                                = theme.confdir .. "/icons/spkr.png"
+theme.widget_vol                                = theme.confdir .. "/icons/audio-volume-medium-symbolic.svg"
 theme.widget_music                              = theme.confdir .. "/icons/note.png"
 theme.widget_music_on                           = theme.confdir .. "/icons/note.png"
 theme.widget_music_pause                        = theme.confdir .. "/icons/pause.png"
@@ -125,7 +125,6 @@ local markup = lain.util.markup
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
-local clockicon = wibox.widget.imagebox(theme.widget_clock)
 local mytextclock = wibox.widget.textclock(markup("#7788af", "%A %d %B ") .. markup("#535f7a", ">") .. markup("#de5e1e", " %H:%M "))
 mytextclock.font = theme.font
 
@@ -166,7 +165,18 @@ theme.volume = lain.widget.alsa({
         widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, volume_now.level .. "% "))
     end
 })
+local volbuttons = my_table.join(
+    awful.button({ }, 1,
+        function()
+            awful.util.spawn("pavucontrol")
+        end
+    )
+)
+volicon:buttons(volbuttons)
+theme.volume.widget:buttons(volbuttons)
 
+
+-- Mute/un-mute notifications
 local notifications = wibox.widget.imagebox(theme.notifications_enabled)
 notifications:buttons(my_table.join(
     awful.button({ }, 1,
@@ -183,10 +193,6 @@ notifications:buttons(my_table.join(
 ))
 
 function theme.at_screen_connect(s)
-    -- Quake application
-    -- s.quake = lain.util.quake({ app = awful.util.terminal })
-    s.quake = lain.util.quake({ app = "urxvt", height = 0.50, argname = "--name %s" })
-
     -- If wallpaper is a function, call it with the screen
     local wallpaper = theme.wallpaper
     if type(wallpaper) == "function" then
@@ -201,29 +207,13 @@ function theme.at_screen_connect(s)
     end
     awful.tag(awful.util.tagnames, s, tag_layout)
 
-    s.mylauncher = awful.widget.button({ image = theme.awesome_icon })
-    s.mylauncher:buttons(my_table.join(
-        awful.button({ }, 1, function() awful.util.spawn("archlinux-logout") end)
-    ))
-
-    -- Create a promptbox for each screen
-    s.mypromptbox = awful.widget.prompt()
-    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
-    -- We need one layoutbox per screen.
-    s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(my_table.join(
-        awful.button({ }, 1, function () awful.layout.inc( 1) end),
-        awful.button({ }, 3, function () awful.layout.inc(-1) end)
-    ))
     -- Create a taglist widget
     s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
 
-    -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
-    local clock             = require('widget.clock')(s)
+    local clock = require('widget.clock')(s)
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -231,18 +221,15 @@ function theme.at_screen_connect(s)
         expand = 'none',
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            --s.mylayoutbox,
             s.mytaglist,
-            s.mypromptbox,
         },
-        --s.mytasklist, -- Middle widget
         clock,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            volicon,
-            theme.volume.widget,
             baticon,
             bat.widget,
+            volicon,
+            theme.volume.widget,
             notifications,
             wibox.widget.systray(),
 
@@ -251,6 +238,21 @@ function theme.at_screen_connect(s)
 
     -- Create the bottom wibox
     s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, border_width = 0, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
+
+    s.mylauncher = awful.widget.button({ image = theme.awesome_icon })
+    s.mylauncher:buttons(my_table.join(
+        awful.button({ }, 1, function() awful.util.spawn("archlinux-logout") end)
+    ))
+
+    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
+    -- We need one layoutbox per screen.
+    s.mylayoutbox = awful.widget.layoutbox(s)
+    s.mylayoutbox:buttons(my_table.join(
+        awful.button({ }, 1, function () awful.layout.inc( 1) end),
+        awful.button({ }, 3, function () awful.layout.inc(-1) end)
+    ))
+    -- Create a tasklist widget
+    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Add widgets to the bottom wibox
     s.mybottomwibox:setup {
