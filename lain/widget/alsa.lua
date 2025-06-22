@@ -7,7 +7,6 @@
 --]]
 
 local helpers = require("lain.helpers")
-local shell   = require("awful.util").shell
 local wibox   = require("wibox")
 local string  = string
 
@@ -22,14 +21,8 @@ local function factory(args)
 
     alsa.cmd           = args.cmd or "amixer"
     alsa.channel       = args.channel or "Master"
-    alsa.togglechannel = args.togglechannel
 
     local format_cmd = string.format("%s get %s", alsa.cmd, alsa.channel)
-
-    if alsa.togglechannel then
-        format_cmd = { shell, "-c", string.format("%s get %s; %s get %s",
-        alsa.cmd, alsa.channel, alsa.cmd, alsa.togglechannel) }
-    end
 
     alsa.last = {}
 
