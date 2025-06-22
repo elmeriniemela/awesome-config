@@ -10,7 +10,6 @@ run nm-applet
 run aarchup --aur --loop-time 60
 run blueberry-tray
 run /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-run volumeicon
 run xfce4-clipman
 run xautolock -time 60 -locker "betterlockscreen -l" -detectsleep
 
