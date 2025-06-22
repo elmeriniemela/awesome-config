@@ -98,16 +98,12 @@ local shiftkey     = "Shift"
 
 -- personal variables
 --change these variables if you want
-local browser1          = "brave"
-local browser2          = "firefox"
-local browser3          = "chromium -no-default-browser-check"
+local browser          = "brave"
 local editor            = os.getenv("EDITOR") or "vim"
 local editorgui         = "code"
 local filemanager       = "thunar"
 local mailclient        = "thunderbird"
-local mediaplayer       = "spotify"
 local terminal          = "alacritty"
-local virtualmachine    = "virtualbox"
 
 -- awesome variables
 awful.util.terminal = terminal
@@ -180,18 +176,16 @@ screen.connect_signal("arrange", function (s)
         end
     end
 end)
+
 -- Create a wibox for each screen and add it
-awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s)
-    s.systray = wibox.widget.systray()
-    s.systray.visible = true
- end)
+awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) end)
 -- }}}
 
 
 
 -- {{{ Mouse bindings
 root.buttons(my_table.join(
-    awful.button({ }, 3, function () awful.util.spawn( "xfce4-appfinder" ) end)
+    awful.button({ }, 3, function () awful.util.spawn("rofi -show drun") end)
 ))
 -- }}}
 
@@ -226,12 +220,6 @@ local function run_or_raise_name(cmd, name)
     awful.client.run_or_raise(cmd, matcher)
 end
 
-local function dmenu_run()
-    awful.spawn(string.format("dmenu_run -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn NotoMonoRegular:bold:pixelsize=14",
-        beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus
-    ))
-end
-
 local function conf_monitor()
     awful.spawn.easy_async(
         "bootstrap-linux monitor",
@@ -244,29 +232,22 @@ end
 
 -- {{{ Key bindings
 globalkeys = my_table.join(
-
-    -- awful.key({ modkey }, "space", dmenu_run, {description = "show run menu", group = "hotkeys"}),
     awful.key({ modkey }, "space", function () awful.spawn("rofi -show drun") end, {description = "show run menu", group = "hotkeys"}),
 
     -- super + ... function keys
     awful.key({ modkey }, "F1", hotkeys_popup.show_help, {description = "show help", group="awesome"}),
-    awful.key({ modkey }, "F11", function () awful.util.spawn("rofi -theme-str -show drun") end, {description="rofi fullscreen", group="function keys"}),
-    awful.key({ modkey }, "F12", function () awful.util.spawn( "rofi -show drun" ) end, {description = "rofi" , group = "function keys" }),
-
 
     -- super + ...
     awful.key({ modkey }, "Return", function () run_or_raise(terminal, terminal) end, { description = "open existing or new terminal", group = "launcher" }),
     awful.key({ altkey }, "Return", function () awful.util.spawn(terminal) end, { description = "open new terminal", group = "launcher" } ),
-    awful.key({ modkey }, "q", function () run_or_raise(browser1, browser1) end, { description = "open browser1", group = "launcher" }),
+    awful.key({ modkey }, "q", function () run_or_raise(browser, browser) end, { description = "open browser", group = "launcher" }),
     awful.key({ modkey }, "e", function () run_or_raise(filemanager, filemanager) end, { description = "open filemanager", group = "launcher" } ),
-    awful.key({ modkey }, "t", function () run_or_raise("thunderbird", "thunderbird") end, { description = "open thunderbird", group = "launcher" } ),
+    awful.key({ modkey }, "t", function () run_or_raise(mailclient, mailclient) end, { description = "open email client", group = "launcher" } ),
     awful.key({ modkey }, "w", function () run_or_raise("whatsapp-natifier", "whatsapp") end, { description = "open whatsapp", group = "launcher" } ),
     awful.key({ modkey }, "a", function () run_or_raise("signal-desktop", "signal") end, { description = "open signal", group = "launcher" } ),
     awful.key({ modkey }, "s", function () run_or_raise("slack", "slack") end, { description = "open slack", group = "launcher" } ),
     awful.key({ modkey }, "z", function () run_or_raise("zoom", "zoom") end, { description = "open zoom", group = "launcher" } ),
-    awful.key({ modkey }, "v", function () awful.spawn.with_shell("copyq show") end, { description = "open clipboard manager", group = "launcher" } ),
     awful.key({ modkey }, "c", function () run_or_raise(editorgui, editorgui) end, { description = "open development editor", group = "launcher" } ),
-    awful.key({ modkey }, "g", function () run_or_raise("galculator", "galculator") end, { description = "open galculator", group = "launcher" } ),
     awful.key({ modkey }, "r", function () awful.spawn("rofi -show drun") end, { description = "run prompt", group = "launcher" } ),
     awful.key({ modkey }, "Escape", function () awful.util.spawn( "xkill" ) end, {description = "Kill proces", group = "hotkeys"}),
     awful.key({ modkey }, "u", awful.client.urgent.jumpto, {description = "jump to urgent client", group = "client"}),
@@ -281,19 +262,9 @@ globalkeys = my_table.join(
 
 
     -- ctrl+alt +  ...
-    awful.key({ ctrlkey, altkey }, "w", function() awful.util.spawn( "arcolinux-welcome-app" ) end, {description = "ArcoLinux Welcome App", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "e", function() awful.util.spawn( "arcolinux-tweak-tool" ) end, {description = "ArcoLinux Tweak Tool", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "a", function() awful.util.spawn( "xfce4-appfinder" ) end, {description = "Xfce appfinder", group = "alt+ctrl"}),
     awful.key({ ctrlkey, altkey }, "o", function() awful.spawn.with_shell("$HOME/.config/awesome/scripts/picom-toggle.sh") end, {description = "Picom toggle", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "s", function() awful.util.spawn( mediaplayer ) end, {description = mediaplayer, group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "u", function() awful.util.spawn( "pavucontrol" ) end, {description = "pulseaudio control", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "m", function() awful.util.spawn( "xfce4-settings-manager" ) end, {description = "Xfce settings manager", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "p", function() awful.util.spawn( "pamac-manager" ) end, {description = "Pamac Manager", group = "alt+ctrl"}),
-    awful.key({ ctrlkey, altkey }, "Delete", function () awful.util.spawn("archlinux-logout") end, {description = "exit", group = "hotkeys"}),
 
     -- alt + ...
-    awful.key({ altkey }, "F2", function () awful.util.spawn( "xfce4-appfinder --collapsed" ) end, {description = "Xfce appfinder", group = "altkey"}),
-    awful.key({ altkey }, "F3", function () awful.util.spawn( "xfce4-appfinder" ) end, {description = "Xfce appfinder", group = "altkey"}),
     awful.key({ altkey }, "Tab", function () awful.spawn("rofi -show window -kb-accept-entry '!Alt-Tab,Return' -kb-row-down 'Alt-Tab,Down' -kb-cancel 'Alt+Escape,Escape'") end, { description = "Select Open client", group = "layout" } ),
 
 
