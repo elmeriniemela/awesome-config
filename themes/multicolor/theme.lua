@@ -168,7 +168,7 @@ theme.volume = lain.widget.alsa({
 local volbuttons = my_table.join(
     awful.button({ }, 1,
         function()
-            awful.util.spawn("pavucontrol")
+            awful.spawn("pavucontrol")
         end
     )
 )
@@ -241,7 +241,7 @@ function theme.at_screen_connect(s)
 
     s.mylauncher = awful.widget.button({ image = theme.awesome_icon })
     s.mylauncher:buttons(my_table.join(
-        awful.button({ }, 1, function() awful.util.spawn("archlinux-logout") end)
+        awful.button({ }, 1, function() awful.spawn("archlinux-logout") end)
     ))
 
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.

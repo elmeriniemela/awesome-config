@@ -185,7 +185,7 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) 
 
 -- {{{ Mouse bindings
 root.buttons(my_table.join(
-    awful.button({ }, 3, function () awful.util.spawn("rofi -show drun") end)
+    awful.button({ }, 3, function () awful.spawn("rofi -show drun") end)
 ))
 -- }}}
 
@@ -239,7 +239,7 @@ globalkeys = my_table.join(
 
     -- super + ...
     awful.key({ modkey }, "Return", function () run_or_raise(terminal, terminal) end, { description = "open existing or new terminal", group = "launcher" }),
-    awful.key({ altkey }, "Return", function () awful.util.spawn(terminal) end, { description = "open new terminal", group = "launcher" } ),
+    awful.key({ altkey }, "Return", function () awful.spawn(terminal) end, { description = "open new terminal", group = "launcher" } ),
     awful.key({ modkey }, "q", function () run_or_raise(browser, browser) end, { description = "open browser", group = "launcher" }),
     awful.key({ modkey }, "e", function () run_or_raise(filemanager, filemanager) end, { description = "open filemanager", group = "launcher" } ),
     awful.key({ modkey }, "t", function () run_or_raise(mailclient, mailclient) end, { description = "open email client", group = "launcher" } ),
@@ -249,7 +249,7 @@ globalkeys = my_table.join(
     awful.key({ modkey }, "z", function () run_or_raise("zoom", "zoom") end, { description = "open zoom", group = "launcher" } ),
     awful.key({ modkey }, "c", function () run_or_raise(editorgui, editorgui) end, { description = "open development editor", group = "launcher" } ),
     awful.key({ modkey }, "r", function () awful.spawn("rofi -show drun") end, { description = "run prompt", group = "launcher" } ),
-    awful.key({ modkey }, "Escape", function () awful.util.spawn( "xkill" ) end, {description = "Kill proces", group = "hotkeys"}),
+    awful.key({ modkey }, "Escape", function () awful.spawn( "xkill" ) end, {description = "Kill proces", group = "hotkeys"}),
     awful.key({ modkey }, "u", awful.client.urgent.jumpto, {description = "jump to urgent client", group = "client"}),
 
 
@@ -258,7 +258,7 @@ globalkeys = my_table.join(
     awful.key({ ctrlkey, modkey }, "w", conf_monitor, {description="autoconfigure monitors", group = "hotkeys" }),
 
     -- ctrl + shift + ...
-    awful.key({ ctrlkey, shiftkey }, "Escape", function() awful.util.spawn("xfce4-taskmanager") end),
+    awful.key({ ctrlkey, shiftkey }, "Escape", function() awful.spawn("xfce4-taskmanager") end),
 
 
     -- ctrl+alt +  ...
@@ -270,8 +270,8 @@ globalkeys = my_table.join(
 
     awful.key({ }, "Print", function() awful.spawn.with_shell("flameshot gui") end, { description = "print screen", group = "hotkeys" }),
     -- XF86
-    awful.key({ }, "XF86PowerOff", function () awful.util.spawn("systemctl poweroff") end, {description = "exit", group = "hotkeys"}),
-    awful.key({ }, "XF86PowerDown", function () awful.util.spawn("systemctl poweroff") end, {description = "exit", group = "hotkeys"}),
+    awful.key({ }, "XF86PowerOff", function () awful.spawn("systemctl poweroff") end, {description = "exit", group = "hotkeys"}),
+    awful.key({ }, "XF86PowerDown", function () awful.spawn("systemctl poweroff") end, {description = "exit", group = "hotkeys"}),
     awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end, {description = "+10%", group = "hotkeys"}),
     awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end, {description = "-10%", group = "hotkeys"}),
     awful.key({ }, "XF86AudioRaiseVolume", function () os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel)) beautiful.volume.update() end),
@@ -413,6 +413,7 @@ awful.rules.rules = {
                 "Alacritty",
                 "Termite",
                 "Polkit-gnome-authentication-agent-1",
+                "Lxpolkit",
                 "Arcolinux-calamares-tool.py",
                 "electrum",
             },
