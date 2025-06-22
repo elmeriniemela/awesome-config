@@ -87,7 +87,7 @@ awful.spawn.with_shell(
 
 -- {{{ Variable definitions
 
-local theme_path = string.format("%s/.config/awesome/themes/multicolor/theme.lua", os.getenv("HOME"))
+local theme_path = string.format("%s/.config/awesome/themes/simple/theme.lua", os.getenv("HOME"))
 beautiful.init(theme_path)
 
 -- modkey or mod4 = super key

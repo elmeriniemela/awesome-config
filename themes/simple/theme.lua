@@ -1,6 +1,6 @@
 --[[
 
-     Multicolor Awesome WM theme 2.0
+     simple Awesome WM theme 2.0
      github.com/lcpz
 
 --]]
@@ -31,13 +31,13 @@ local function wallpaper(s)
         wallpaper_path = read_file(os.getenv("HOME") .. "/.config/variety/wallpaper/wallpaper.png.txt")
     end
     if not wallpaper_path then
-        wallpaper_path = os.getenv("HOME") .. "/.config/awesome/themes/multicolor/wallpaper.jpg"
+        wallpaper_path = os.getenv("HOME") .. "/.config/awesome/themes/simple/wallpaper.jpg"
     end
     return wallpaper_path
 end
 
 local theme                                     = {}
-theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
+theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/simple"
 theme.wallpaper                                 = wallpaper
 theme.font                                      = 'Inter Regular 10'
 theme.font_bold                                 = 'Inter Bold 10'
