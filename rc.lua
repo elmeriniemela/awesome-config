@@ -357,6 +357,9 @@ root.keys(globalkeys)
 -- }}}
 
 
+s1 = 1
+s2 = screen:count() > 1 and 2 or 1
+
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
@@ -435,6 +438,51 @@ awful.rules.rules = {
             floating = true,
             above = true,
             placement = awful.placement.centered,
+        },
+    },
+    {
+        rule_any = {
+            class = {
+                "Slack",
+                "slack",
+                "thunderbird",
+                "Mail",
+                "zoom",
+                "Signal",
+                "Zulip",
+                "TelegramDesktop",
+                "discord",
+            },
+        },
+        properties = {
+            tag = "➒",
+            screen = s2,
+        },
+    },
+    {
+        rule_any = {
+            class = {
+                "brave-browser",
+                "Brave-browser",
+                "firefox",
+            },
+        },
+        properties = {
+            tag = "➊",
+            screen = s1,
+        },
+    },
+        {
+        rule_any = {
+            class = {
+                "code-oss",
+                "code",
+                "Code",
+            },
+        },
+        properties = {
+            tag = "➊",
+            screen = s2,
         },
     },
 }
