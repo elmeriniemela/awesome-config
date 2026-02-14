@@ -446,6 +446,7 @@ awful.rules.rules = {
                 "Slack",
                 "slack",
                 "thunderbird",
+                "org.mozilla.Thunderbird",
                 "Mail",
                 "zoom",
                 "Signal",
