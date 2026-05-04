@@ -272,8 +272,8 @@ globalkeys = my_table.join(
     -- XF86
     awful.key({ }, "XF86PowerOff", function () awful.spawn("systemctl poweroff") end, {description = "exit", group = "hotkeys"}),
     awful.key({ }, "XF86PowerDown", function () awful.spawn("systemctl poweroff") end, {description = "exit", group = "hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end, {description = "+10%", group = "hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end, {description = "-10%", group = "hotkeys"}),
+    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 1") end, {description = "+1%", group = "hotkeys"}),
+    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 1") end, {description = "-1%", group = "hotkeys"}),
     awful.key({ }, "XF86AudioRaiseVolume", function () os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel)) beautiful.volume.update() end),
     awful.key({ }, "XF86AudioLowerVolume", function () os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel)) beautiful.volume.update() end),
     awful.key({ }, "XF86AudioMute", function () os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel)) beautiful.volume.update() end)
