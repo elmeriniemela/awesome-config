@@ -7,7 +7,6 @@ function run {
   fi
 }
 run nm-applet
-run aarchup --loop-time 60
 run blueberry-tray
 run lxsession
 run xfce4-clipman

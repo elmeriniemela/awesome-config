@@ -243,7 +243,6 @@ globalkeys = my_table.join(
     awful.key({ modkey }, "q", function () run_or_raise(browser, browser) end, { description = "open browser", group = "launcher" }),
     awful.key({ modkey }, "e", function () run_or_raise(filemanager, filemanager) end, { description = "open filemanager", group = "launcher" } ),
     awful.key({ modkey }, "t", function () run_or_raise(mailclient, mailclient) end, { description = "open email client", group = "launcher" } ),
-    awful.key({ modkey }, "w", function () run_or_raise("whatsapp-natifier", "whatsapp") end, { description = "open whatsapp", group = "launcher" } ),
     awful.key({ modkey }, "a", function () run_or_raise("signal-desktop", "signal") end, { description = "open signal", group = "launcher" } ),
     awful.key({ modkey }, "s", function () run_or_raise("slack", "slack") end, { description = "open slack", group = "launcher" } ),
     awful.key({ modkey }, "z", function () run_or_raise("zoom", "zoom") end, { description = "open zoom", group = "launcher" } ),
@@ -283,7 +282,7 @@ globalkeys = my_table.join(
 clientkeys = gears.table.join(
     awful.key({ modkey, }, "f", awful.client.floating.toggle, {description = "toggle floating", group = "client"}),
     awful.key({ modkey, }, "m", function (c) c.minimized = true end, {description = "minimize", group = "client"}),
-    awful.key({ modkey, shiftkey }, "d", function (c) c:kill() end, {description = "close", group = "client"})
+    awful.key({ modkey, }, "w", function (c) c:kill() end, {description = "close", group = "client"})
 )
 
 
