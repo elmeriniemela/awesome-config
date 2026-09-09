@@ -8,7 +8,7 @@ function run {
 }
 run nm-applet
 run blueberry-tray
-run lxsession
+run lxpolkit
 run xfce4-clipman
 run xautolock -time 60 -locker $HOME/.config/awesome/scripts/locker.sh -detectsleep
 run picom -b --config $HOME/.config/awesome/picom.conf
