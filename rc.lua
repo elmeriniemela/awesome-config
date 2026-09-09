@@ -360,6 +360,24 @@ s1 = 1
 s2 = screen:count() > 1 and 2 or 1
 
 
+-- Window types that are popups/dialogs rather than real application windows.
+-- Tag/screen rules must not apply to these, or e.g. VS Code's delete
+-- confirmation would be dragged to the tag of its class rule instead of
+-- staying next to the window that spawned it.
+local popup_types = {
+    "dialog",
+    "utility",
+    "splash",
+    "menu",
+    "dropdown_menu",
+    "popup_menu",
+    "tooltip",
+    "notification",
+    "toolbar",
+    "combo",
+    "dnd",
+}
+
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
@@ -454,6 +472,7 @@ awful.rules.rules = {
                 "discord",
             },
         },
+        except_any = { type = popup_types },
         properties = {
             tag = "➒",
             screen = s2,
@@ -467,6 +486,7 @@ awful.rules.rules = {
                 "firefox",
             },
         },
+        except_any = { type = popup_types },
         properties = {
             tag = "➊",
             screen = s1,
@@ -480,6 +500,7 @@ awful.rules.rules = {
                 "Code",
             },
         },
+        except_any = { type = popup_types },
         properties = {
             tag = "➊",
             screen = s2,
@@ -494,6 +515,16 @@ client.connect_signal("manage", function (c)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
+
+    -- Keep popups/dialogs on the same screen and tag as the window that
+    -- spawned them, whatever the class rules say. Some apps (Electron ones
+    -- like VS Code) do not always set a popup window type, so rely on
+    -- transient_for as well.
+    local parent = c.transient_for
+    if parent then
+        c.screen = parent.screen
+        c:tags(parent:tags())
+    end
 
     if awesome.startup and
       not c.size_hints.user_position
