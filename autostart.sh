@@ -7,10 +7,10 @@ function run {
   fi
 }
 run nm-applet
-run blueberry-tray
+run blueman-applet
 run lxpolkit
 run xfce4-clipman
-run xautolock -time 60 -locker $HOME/.config/awesome/scripts/locker.sh -detectsleep
+run xss-lock -- $HOME/.config/awesome/scripts/locker.sh
 run picom -b --config $HOME/.config/awesome/picom.conf
 
 # Convenience
@@ -20,5 +20,5 @@ run picom -b --config $HOME/.config/awesome/picom.conf
 
 #  disabling energy star features
 xset -dpms
-# disable screensaver
-xset s off
+# Lock after one hour of inactivity.
+xset s 3600
