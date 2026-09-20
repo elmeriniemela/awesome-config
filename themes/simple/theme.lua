@@ -79,6 +79,8 @@ theme.widget_batt                               = theme.confdir .. "/icons/batte
 theme.widget_clock                              = theme.confdir .. "/icons/clock.png"
 theme.widget_vol                                = theme.confdir .. "/icons/audio-volume-medium-symbolic.svg"
 theme.widget_backlight                          = theme.confdir .. "/icons/display-brightness-symbolic.svg"
+theme.widget_mic                               = theme.confdir .. "/icons/microphone-sensitivity-high-symbolic.svg"
+theme.widget_mic_muted                         = theme.confdir .. "/icons/microphone-sensitivity-muted-symbolic.svg"
 theme.widget_music                              = theme.confdir .. "/icons/note.png"
 theme.widget_music_on                           = theme.confdir .. "/icons/note.png"
 theme.widget_music_pause                        = theme.confdir .. "/icons/pause.png"
@@ -215,6 +217,36 @@ local backlight_buttons = my_table.join(
 backlighticon:buttons(backlight_buttons)
 backlight_widget:buttons(backlight_buttons)
 
+-- Active PipeWire microphone state
+local micicon = wibox.widget.imagebox(theme.widget_mic)
+local _, microphone_timer = awful.widget.watch(
+    "wpctl get-volume @DEFAULT_AUDIO_SOURCE@",
+    5,
+    function(_, stdout)
+        if (stdout or ""):lower():match("%[muted%]") then
+            micicon.image = theme.widget_mic_muted
+        else
+            micicon.image = theme.widget_mic
+        end
+    end
+)
+
+theme.microphone = {
+    update = function()
+        microphone_timer:emit_signal("timeout")
+    end,
+}
+
+function theme.microphone.toggle()
+    awful.spawn.easy_async("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", function()
+        theme.microphone.update()
+    end)
+end
+
+micicon:buttons(my_table.join(
+    awful.button({}, 1, theme.microphone.toggle)
+))
+
 
 -- Mute/un-mute notifications
 local notifications = wibox.widget.imagebox(theme.notifications_enabled)
@@ -270,6 +302,7 @@ function theme.at_screen_connect(s)
             bat.widget,
             backlighticon,
             theme.backlight.widget,
+            micicon,
             volicon,
             theme.volume.widget,
             notifications,
