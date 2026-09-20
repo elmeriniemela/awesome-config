@@ -157,17 +157,60 @@ local bat = lain.widget.bat({
     end
 })
 
--- ALSA volume
+-- Active PipeWire output volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
-theme.volume = lain.widget.alsa({
-    settings = function()
-        if volume_now.status == "off" then
-            volume_now.level = volume_now.level .. "M"
-        end
+local volume_widget = wibox.widget.textbox()
+local mute_led = "/sys/class/leds/platform::mute/brightness"
+local output_muted
 
-        widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, volume_now.level .. "% "))
-    end
-})
+local function set_mute_led(muted)
+    awful.spawn.easy_async_with_shell(
+        "printf %s " .. (muted and "1" or "0") .. " > " .. mute_led
+    )
+end
+
+local _, volume_timer = awful.widget.watch(
+    "wpctl get-volume @DEFAULT_AUDIO_SINK@",
+    5,
+    function(widget, stdout)
+        local value = tonumber((stdout or ""):match("Volume:%s*([%d%.]+)"))
+        if value then
+            local level = math.floor(value * 100 + 0.5) .. "%"
+            local muted = (stdout or ""):lower():match("%[muted%]") ~= nil
+            if muted then
+                level = level .. "M"
+            end
+            widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, level .. " "))
+
+            if output_muted ~= muted then
+                output_muted = muted
+                set_mute_led(muted)
+            end
+        else
+            widget:set_markup("")
+        end
+    end,
+    volume_widget
+)
+
+theme.volume = {
+    widget = volume_widget,
+    update = function()
+        volume_timer:emit_signal("timeout")
+    end,
+}
+
+function theme.volume.adjust(amount)
+    awful.spawn.easy_async("wpctl set-volume @DEFAULT_AUDIO_SINK@ " .. amount, function()
+        theme.volume.update()
+    end)
+end
+
+function theme.volume.toggle()
+    awful.spawn.easy_async("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", function()
+        theme.volume.update()
+    end)
+end
 local volbuttons = my_table.join(
     awful.button({ }, 1,
         function()

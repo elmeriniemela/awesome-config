@@ -273,9 +273,9 @@ globalkeys = my_table.join(
     awful.key({ }, "XF86PowerDown", function () awful.spawn("systemctl poweroff") end, {description = "exit", group = "hotkeys"}),
     awful.key({ }, "XF86MonBrightnessUp", function () beautiful.backlight.adjust("+1%") end, {description = "+1%", group = "hotkeys"}),
     awful.key({ }, "XF86MonBrightnessDown", function () beautiful.backlight.adjust("1%-") end, {description = "-1%", group = "hotkeys"}),
-    awful.key({ }, "XF86AudioRaiseVolume", function () os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel)) beautiful.volume.update() end),
-    awful.key({ }, "XF86AudioLowerVolume", function () os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel)) beautiful.volume.update() end),
-    awful.key({ }, "XF86AudioMute", function () os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel)) beautiful.volume.update() end),
+    awful.key({ }, "XF86AudioRaiseVolume", function () beautiful.volume.adjust("1%+") end),
+    awful.key({ }, "XF86AudioLowerVolume", function () beautiful.volume.adjust("1%-") end),
+    awful.key({ }, "XF86AudioMute", function () beautiful.volume.toggle() end, {description = "toggle output mute", group = "hotkeys"}),
     awful.key({ }, "XF86AudioMicMute", function () beautiful.microphone.toggle() end, {description = "toggle microphone mute", group = "hotkeys"})
 
 )
