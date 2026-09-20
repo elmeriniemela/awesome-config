@@ -78,6 +78,7 @@ theme.widget_mail                               = theme.confdir .. "/icons/mail.
 theme.widget_batt                               = theme.confdir .. "/icons/battery-full-charged-symbolic.svg"
 theme.widget_clock                              = theme.confdir .. "/icons/clock.png"
 theme.widget_vol                                = theme.confdir .. "/icons/audio-volume-medium-symbolic.svg"
+theme.widget_backlight                          = theme.confdir .. "/icons/display-brightness-symbolic.svg"
 theme.widget_music                              = theme.confdir .. "/icons/note.png"
 theme.widget_music_on                           = theme.confdir .. "/icons/note.png"
 theme.widget_music_pause                        = theme.confdir .. "/icons/pause.png"
@@ -175,6 +176,45 @@ local volbuttons = my_table.join(
 volicon:buttons(volbuttons)
 theme.volume.widget:buttons(volbuttons)
 
+-- Screen backlight
+local backlighticon = wibox.widget.imagebox(theme.widget_backlight)
+local backlight_widget = wibox.widget.textbox()
+local _, backlight_timer = awful.widget.watch(
+    "brightnessctl -m",
+    5,
+    function(widget, stdout)
+        local level = stdout:match("(%d+)%%")
+        if level then
+            widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, level .. "% "))
+        else
+            widget:set_markup("")
+        end
+    end,
+    backlight_widget
+)
+
+theme.backlight = {
+    widget = backlight_widget,
+    update = function()
+        backlight_timer:emit_signal("timeout")
+    end,
+}
+
+local function adjust_backlight(amount)
+    awful.spawn.easy_async_with_shell("brightnessctl set " .. amount .. " >/dev/null", function()
+        theme.backlight.update()
+    end)
+end
+
+theme.backlight.adjust = adjust_backlight
+
+local backlight_buttons = my_table.join(
+    awful.button({}, 4, function() adjust_backlight("+5%") end),
+    awful.button({}, 5, function() adjust_backlight("5%-") end)
+)
+backlighticon:buttons(backlight_buttons)
+backlight_widget:buttons(backlight_buttons)
+
 
 -- Mute/un-mute notifications
 local notifications = wibox.widget.imagebox(theme.notifications_enabled)
@@ -228,6 +268,8 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
             baticon,
             bat.widget,
+            backlighticon,
+            theme.backlight.widget,
             volicon,
             theme.volume.widget,
             notifications,
