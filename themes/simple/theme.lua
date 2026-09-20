@@ -78,6 +78,7 @@ theme.widget_mail                               = theme.confdir .. "/icons/mail.
 theme.widget_batt                               = theme.confdir .. "/icons/battery-full-charged-symbolic.svg"
 theme.widget_clock                              = theme.confdir .. "/icons/clock.png"
 theme.widget_vol                                = theme.confdir .. "/icons/audio-volume-medium-symbolic.svg"
+theme.widget_vol_muted                          = theme.confdir .. "/icons/audio-volume-muted-symbolic.svg"
 theme.widget_backlight                          = theme.confdir .. "/icons/display-brightness-symbolic.svg"
 theme.widget_mic                               = theme.confdir .. "/icons/microphone-sensitivity-high-symbolic.svg"
 theme.widget_mic_muted                         = theme.confdir .. "/icons/microphone-sensitivity-muted-symbolic.svg"
@@ -178,7 +179,9 @@ local _, volume_timer = awful.widget.watch(
             local level = math.floor(value * 100 + 0.5) .. "%"
             local muted = (stdout or ""):lower():match("%[muted%]") ~= nil
             if muted then
-                level = level .. "M"
+                volicon.image = theme.widget_vol_muted
+            else
+                volicon.image = theme.widget_vol
             end
             widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, level .. " "))
 
