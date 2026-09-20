@@ -217,7 +217,7 @@ end
 local volbuttons = my_table.join(
     awful.button({ }, 1,
         function()
-            awful.spawn("pavucontrol")
+            awful.spawn({ "pavucontrol", "--tab=3" })
         end
     )
 )
@@ -314,12 +314,13 @@ function theme.microphone.toggle()
     end)
 end
 
-micicon:buttons(my_table.join(
+local micbuttons = my_table.join(
     awful.button({}, 1, function()
-        awful.spawn("pavucontrol")
+        awful.spawn({ "pavucontrol", "--tab=4" })
     end)
-))
-mic_volume_widget:buttons(volbuttons)
+)
+micicon:buttons(micbuttons)
+mic_volume_widget:buttons(micbuttons)
 
 
 -- Mute/un-mute notifications
