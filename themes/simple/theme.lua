@@ -219,14 +219,29 @@ backlight_widget:buttons(backlight_buttons)
 
 -- Active PipeWire microphone state
 local micicon = wibox.widget.imagebox(theme.widget_mic)
+local micmute_led = "/sys/class/leds/platform::micmute/brightness"
+local mic_muted
+
+local function set_micmute_led(muted)
+    awful.spawn.easy_async_with_shell(
+        "printf %s " .. (muted and "1" or "0") .. " > " .. micmute_led
+    )
+end
+
 local _, microphone_timer = awful.widget.watch(
     "wpctl get-volume @DEFAULT_AUDIO_SOURCE@",
     5,
     function(_, stdout)
-        if (stdout or ""):lower():match("%[muted%]") then
+        local muted = (stdout or ""):lower():match("%[muted%]") ~= nil
+        if muted then
             micicon.image = theme.widget_mic_muted
         else
             micicon.image = theme.widget_mic
+        end
+
+        if mic_muted ~= muted then
+            mic_muted = muted
+            set_micmute_led(muted)
         end
     end
 )
