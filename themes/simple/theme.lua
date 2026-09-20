@@ -217,7 +217,7 @@ end
 local volbuttons = my_table.join(
     awful.button({ }, 1,
         function()
-            awful.spawn({ "pavucontrol", "--tab=3" })
+            awful.spawn({ "pwvucontrol", "--tab=3" })
         end
     )
 )
@@ -316,7 +316,7 @@ end
 
 local micbuttons = my_table.join(
     awful.button({}, 1, function()
-        awful.spawn({ "pavucontrol", "--tab=4" })
+        awful.spawn({ "pwvucontrol", "--tab=4" })
     end)
 )
 micicon:buttons(micbuttons)
