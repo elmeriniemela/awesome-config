@@ -265,6 +265,7 @@ backlight_widget:buttons(backlight_buttons)
 
 -- Active PipeWire microphone state
 local micicon = wibox.widget.imagebox(theme.widget_mic)
+local mic_volume_widget = wibox.widget.textbox()
 local micmute_led = "/sys/class/leds/platform::micmute/brightness"
 local mic_muted
 
@@ -277,19 +278,28 @@ end
 local _, microphone_timer = awful.widget.watch(
     "wpctl get-volume @DEFAULT_AUDIO_SOURCE@",
     5,
-    function(_, stdout)
+    function(widget, stdout)
         local muted = (stdout or ""):lower():match("%[muted%]") ~= nil
+        local value = tonumber((stdout or ""):match("Volume:%s*([%d%.]+)"))
         if muted then
             micicon.image = theme.widget_mic_muted
         else
             micicon.image = theme.widget_mic
         end
 
+        if value then
+            local level = math.floor(value * 100 + 0.5) .. "%"
+            widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, level .. " "))
+        else
+            widget:set_markup("")
+        end
+
         if mic_muted ~= muted then
             mic_muted = muted
             set_micmute_led(muted)
         end
-    end
+    end,
+    mic_volume_widget
 )
 
 theme.microphone = {
@@ -305,8 +315,11 @@ function theme.microphone.toggle()
 end
 
 micicon:buttons(my_table.join(
-    awful.button({}, 1, theme.microphone.toggle)
+    awful.button({}, 1, function()
+        awful.spawn("pavucontrol")
+    end)
 ))
+mic_volume_widget:buttons(volbuttons)
 
 
 -- Mute/un-mute notifications
@@ -364,6 +377,7 @@ function theme.at_screen_connect(s)
             backlighticon,
             theme.backlight.widget,
             micicon,
+            mic_volume_widget,
             volicon,
             theme.volume.widget,
             notifications,
