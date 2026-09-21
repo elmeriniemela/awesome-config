@@ -22,14 +22,11 @@ local function read_file(path)
     if not file then return nil end
     local content = file:read "*a" -- *a or *all reads the whole file
     file:close()
-    return content
+    return content:match("^%s*(.-)%s*$")
 end
 
 local function wallpaper(s)
-    wallpaper_path = read_file(os.getenv("HOME") .. "/.config/variety/wallpaper/wallpaper.jpg.txt")
-    if not wallpaper_path then
-        wallpaper_path = read_file(os.getenv("HOME") .. "/.config/variety/wallpaper/wallpaper.png.txt")
-    end
+    local wallpaper_path = read_file(os.getenv("HOME") .. "/.config/variety/wallpaper/wallpaper.txt")
     if not wallpaper_path then
         wallpaper_path = os.getenv("HOME") .. "/.config/awesome/themes/simple/wallpaper.jpg"
     end
@@ -166,7 +163,8 @@ local output_muted
 
 local function set_mute_led(muted)
     awful.spawn.easy_async_with_shell(
-        "printf %s " .. (muted and "1" or "0") .. " > " .. mute_led
+        "printf %s " .. (muted and "1" or "0") .. " > " .. mute_led,
+        function() end
     )
 end
 
@@ -271,7 +269,8 @@ local mic_muted
 
 local function set_micmute_led(muted)
     awful.spawn.easy_async_with_shell(
-        "printf %s " .. (muted and "1" or "0") .. " > " .. micmute_led
+        "printf %s " .. (muted and "1" or "0") .. " > " .. micmute_led,
+        function() end
     )
 end
 
