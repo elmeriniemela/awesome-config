@@ -7,7 +7,7 @@ function run {
   fi
 }
 run nm-applet
-run blueman-applet
+run blueman-applet --loglevel debug --syslog
 run lxpolkit
 run xfce4-clipman
 run xss-lock -- $HOME/.config/awesome/scripts/locker.sh
